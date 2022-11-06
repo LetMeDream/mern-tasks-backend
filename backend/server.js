@@ -1,11 +1,20 @@
+const dotenv = require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
+const tasksRouter = require('./routes/taskRoutes')
+
 const app = express();
-const port = 8080;
+const PORT = process.env.PORT || 8080;
 
-app.get('/', (req,res)=>{
-    res.send('<h1>Hello World</h1>')
-});
+/* Built-in express.json middleware */
+app.use(express.json());
+app.use('/api/tasks',tasksRouter);
 
-app.listen(port, ()=>{
-    console.log('Server running on port ' + port)
-})
+mongoose.connect(process.env.MONGO_URI)
+    .then(()=>{
+        console.log('MongoDB connected successfully')  
+        app.listen(PORT, ()=>{
+            console.log(`Server started at port: ${PORT}`)
+        })
+    })
+    .catch((err)=>{ console.log(err); })
