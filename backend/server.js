@@ -1,11 +1,17 @@
 const dotenv = require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const tasksRouter = require('./routes/taskRoutes')
+const tasksRouter = require('./routes/taskRoutes');
+/* Cors */
+const cors = require('cors');
+
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+app.use(cors({
+    origin: '*'
+}))
 /* Built-in express.json middleware */
 app.use(express.json());
 app.use('/api/tasks',tasksRouter);

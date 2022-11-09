@@ -56,11 +56,30 @@ const updateTask = async (req,res) => {
         res.status(500).json({msg:error.message})
     }
 }
+const patchTask = async (req,res) => {
+    try {
+        const {id} = req.params;
+        const task = await Task.findByIdAndUpdate(id, req.body,
+            { 
+                new:true,
+                runValidators:true
+            }
+        );
+        if(!task){
+            return res.status(404).send(`The task does not exist`);
+        }
+        res.status(200).json(task);
+    } catch (error) {
+        res.status(500).json({msg:error.message})
+    }
+}
+
 
 module.exports = {
     createTask,
     getAllTasks,
     getTask,
     deleteTask,
-    updateTask
+    updateTask,
+    patchTask
 }
