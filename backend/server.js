@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(cors({
-    origin: '*'
+    origin: ['http://127.0.0.1:5173']
 }))
 /* Built-in express.json middleware */
 app.use(express.json());
