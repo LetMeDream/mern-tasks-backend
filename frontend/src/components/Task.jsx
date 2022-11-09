@@ -9,7 +9,7 @@ const Task = ({task,i,deleteTask,checkTask,id,setupEdit}) => {
   }
   let completed = ''
   if(thisTask){
-    completed = 'text-green-700 bg-blue-100 hover:bg-blue-200 border-l-blue-500'
+    completed = 'text-blue-700 bg-blue-100 hover:bg-blue-200 border-l-blue-500'
   }
   
 
