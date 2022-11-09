@@ -13,17 +13,21 @@ const TaskList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tasks,setTasks] = useState()
   const getTasks = () =>{
-    axios.get(`${URL}/api/tasks`)
-    .then(function (response) {
-      // handle success
-      setTasks(response.data)
-      setIsLoading(false)
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-      setIsLoading(false)
-    })
+    setIsLoading(true);
+    setTimeout(() => {
+      axios.get(`${URL}/api/tasks`)
+      .then(function (response) {
+        // handle success
+        setTasks(response.data)
+        setIsLoading(false)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        setIsLoading(false)
+      })
+    }, 400);
+
   }
   useEffect(()=>{
     getTasks();
@@ -139,17 +143,28 @@ const TaskList = () => {
   /* updateTask, used on TaskForm.jsx */
   const updateTask = async (e,id) => {
     e.preventDefault();
+    if(!Boolean(newTask)){
+      toast.error("Can't create an empty task!", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "dark",
+        });
+      return;
+    }
     let name = e.target.previousSibling.value;
     try {
       await axios.patch(`${URL}/api/tasks/${id}`,{
         name:name
       })
-      toast.success('Updated!');
+      toast.success('Updated!',{
+        position: "top-left",
+        theme: "dark"
+      });
       setIsUpdating(false);
       setNewTask('');
       getTasks();
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message,{theme:'dark'});
       console.log(error);
       setIsUpdating(false);
       setNewTask('');
@@ -163,7 +178,9 @@ const TaskList = () => {
     <div className='flex flex-col items-center w-full px-4'>
       <h2>Task Manager</h2>
 
-      <TaskForm name={newTask} updateTask={updateTask} id={idToUpdate} createTask={createTask} handleInputChange={hangleInputChange} isUpdating={isUpdating} />
+      <TaskForm name={newTask} updateTask={updateTask} id={idToUpdate} 
+      createTask={createTask} handleInputChange={hangleInputChange} 
+      isUpdating={isUpdating} />
 
       <div className='flex justify-between w-full pt-3'>
         <div className='total text-sm'>
